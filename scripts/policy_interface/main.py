@@ -9,21 +9,13 @@ import signal
 import time
 from moviepy.editor import ImageSequenceClip
 import numpy as np
-from openpi_client import image_tools
-from openpi_client import websocket_client_policy
-from huggingface_hub import hf_hub_download
-from transformers import AutoModelForImageTextToText, AutoProcessor
-from PIL import Image
 import pandas as pd
 from PIL import Image
-import torch
 from droid.robot_env import RobotEnv
 import tqdm
 import tyro
 import yaml
-import json_numpy
-import requests
-json_numpy.patch()
+from policy_clients import POLICY_CLIENTS
 
 faulthandler.enable()
 
@@ -38,7 +30,6 @@ CONFIG_KEYS = [
     "max_timesteps",
     "num_rollouts",
 ]
-
 
 @dataclasses.dataclass
 class Args:
@@ -62,12 +53,12 @@ class Args:
     remote_port: int = 8000
 
 
+    # Policy selection
+    policy_client_name: str = "pi0"  # choose from ["pi0", "pi05"]
+
+
     # Output parameters
-    results_dir: str = "/media/daphne/8563-0B16/MolmoAct/results"
-
-
-    # Repo id
-    repo_id: str = "allenai/MolmoAct2-DROID"
+    results_dir: str = "/media/daphne/8563-0B16/openpi/results"
 
 
 
@@ -151,10 +142,6 @@ def load_config(path: str) -> dict:
     return config
 
 
-def make_policy_client(host, port):
-    return f"http://{host}:{port}"
-
-
 def run_rollout(env, policy_client, instruction, args):
     actions_from_chunk_completed = 0
     pred_action_chunk = None
@@ -163,6 +150,7 @@ def run_rollout(env, policy_client, instruction, args):
     video = []
     bar = tqdm.tqdm(range(args.max_timesteps))
     print("Running rollout... press Ctrl+C to stop early.")
+    t_step = 0
     for t_step in bar:
         start_time = time.time()
         try:
@@ -178,17 +166,9 @@ def run_rollout(env, policy_client, instruction, args):
                 actions_from_chunk_completed = 0
 
                 with prevent_keyboard_interrupt():
-                    payload = json_numpy.dumps({
-                        "external_cam": curr_obs[f"{args.external_camera}_image"],
-                        "wrist_cam": curr_obs["wrist_image"],
-                        "instruction": instruction,
-                        "state": np.concatenate([curr_obs["joint_position"], curr_obs["gripper_position"]]),
-                    })
-                    response = requests.post(f"{policy_client}/act", data=payload, headers={"Content-Type": "application/json"})
-                    result = json_numpy.loads(response.text)
-                    pred_action_chunk = result["actions"]
+                    pred_action_chunk = policy_client.infer(curr_obs, instruction, selected_camera=args.external_camera)
 
-            action = pred_action_chunk[actions_from_chunk_completed]
+            action = pred_action_chunk[actions_from_chunk_completed] if pred_action_chunk is not None else np.zeros((7,))
             actions_from_chunk_completed += 1
 
             if action[-1].item() > 0.5:
@@ -278,46 +258,40 @@ def main(args: Args):
         args.external_camera is not None and args.external_camera in ["left", "right"]
     ), f"Please specify an external camera to use for the policy, choose from ['left', 'right'], but got {args.external_camera}"
 
-    env = RobotEnv(action_space="joint_position", gripper_action_space="position")
+    policy_client = POLICY_CLIENTS[args.policy_client_name](args.remote_host, args.remote_port)
+
+    env = RobotEnv(action_space=policy_client.action_space(), gripper_action_space=policy_client.gripper_space())
     print("Created the droid env!")
 
-    policy_client = make_policy_client(args.remote_host, args.remote_port)
+    policy_client.connect()
     print("Connected to policy server!")
 
     benchmarking_mode = prompt_yn("Are you benchmarking a task?")
 
     try:  
         while True:
-            try:  
-                task_name = input("Enter task name: ").strip()
-                instructions = prompt_instructions()
+            task_name = input("Enter task name: ").strip()
+            instructions = prompt_instructions()
 
-                os.makedirs(args.results_dir, exist_ok=True)
-                save_time = datetime.datetime.now().strftime("%I-%M%p_%B_%d_%Y")
-                safe_task_name = task_name.replace(" ", "_").replace("/", "-")[:50]
-                rollout_dir = os.path.join(args.results_dir, f"{safe_task_name}_{save_time}")
-                os.makedirs(rollout_dir, exist_ok=True)
+            os.makedirs(args.results_dir, exist_ok=True)
+            save_time = datetime.datetime.now().strftime("%I-%M%p_%B_%d_%Y")
+            safe_task_name = task_name.replace(" ", "_").replace("/", "-")[:50]
+            rollout_dir = os.path.join(args.results_dir, f"{safe_task_name}_{save_time}")
+            os.makedirs(rollout_dir, exist_ok=True)
 
-                run_evaluation(env, policy_client, task_name, instructions, args, rollout_dir, benchmarking_mode)
+            run_evaluation(env, policy_client, task_name, instructions, args, rollout_dir, benchmarking_mode)
 
-                if not prompt_yn("Evaluate another set of instructions?"):
-                    break
-
-            except KeyboardInterrupt:
-                print("\nInterrupted — returning to model selection.")
-                try:  # Ctrl+C here exits
-                    if prompt_yn("Swap to a different policy server?"):
-                        policy_client = make_policy_client(args.remote_host, args.remote_port)
-                        print("Connected to policy server!")
-                    if not prompt_yn("Evaluate another task?"):
-                        break
-                except KeyboardInterrupt:
-                    print("\nExiting.")
-                    break
+            if not prompt_yn("Evaluate another set of instructions?"):
+                break
 
     except KeyboardInterrupt:
         print("\nExiting.")
 
+    finally:
+        policy_client.disconnect()
+        print("Disconnected from policy server.")
+        env.close()
+        print("Closed the droid env.")
 
 def _extract_observation(args: Args, obs_dict, *, save_to_disk=False):
     image_observations = obs_dict["image"]
@@ -325,18 +299,19 @@ def _extract_observation(args: Args, obs_dict, *, save_to_disk=False):
     for key in image_observations:
         if args.left_camera_id in key and "left" in key:
             left_image = image_observations[key]
-        elif args.right_camera_id in key and "left" in key:
+        elif args.right_camera_id in key and "right" in key:
             right_image = image_observations[key]
-        elif args.wrist_camera_id in key and "left" in key:
+        elif args.wrist_camera_id in key and ("wrist" in key or "hand" in key):
             wrist_image = image_observations[key]
 
 
-    left_image = left_image[..., :3]
-    wrist_image = wrist_image[..., :3]
+    if left_image is None:
+        raise ValueError(f"Left camera image (id={args.left_camera_id}) not found in observation keys: {list(image_observations.keys())}")
+    if wrist_image is None:
+        raise ValueError(f"Wrist camera image (id={args.wrist_camera_id}) not found in observation keys: {list(image_observations.keys())}")
 
-
-    left_image = left_image[..., ::-1]
-    wrist_image = wrist_image[..., ::-1]
+    left_image = left_image[..., :3][..., ::-1]
+    wrist_image = wrist_image[..., :3][..., ::-1]
 
 
     robot_state = obs_dict["robot_state"]
@@ -364,6 +339,4 @@ def _extract_observation(args: Args, obs_dict, *, save_to_disk=False):
 if __name__ == "__main__":
     args: Args = tyro.cli(Args)
     main(args)
-
-
 
