@@ -54,11 +54,11 @@ class Args:
 
 
     # Policy selection
-    policy_client_name: str = "pi0"  # choose from ["pi0", "pi05"]
+    policy: str = "pi0"  # choose from ["pi0", "pi05", "molmoact", "groot"]
 
 
     # Output parameters
-    results_dir: str = "/media/daphne/8563-0B16/openpi/results"
+    results_dir: str = "/media/daphne/Extreme Pro/openpi/results"
 
 
 
@@ -258,7 +258,7 @@ def main(args: Args):
         args.external_camera is not None and args.external_camera in ["left", "right"]
     ), f"Please specify an external camera to use for the policy, choose from ['left', 'right'], but got {args.external_camera}"
 
-    policy_client = POLICY_CLIENTS[args.policy_client_name](args.remote_host, args.remote_port)
+    policy_client = POLICY_CLIENTS[args.policy](args.remote_host, args.remote_port)
 
     env = RobotEnv(action_space=policy_client.action_space(), gripper_action_space=policy_client.gripper_space())
     print("Created the droid env!")
@@ -301,7 +301,7 @@ def _extract_observation(args: Args, obs_dict, *, save_to_disk=False):
             left_image = image_observations[key]
         elif args.right_camera_id in key and "right" in key:
             right_image = image_observations[key]
-        elif args.wrist_camera_id in key and ("wrist" in key or "hand" in key):
+        elif args.wrist_camera_id in key:
             wrist_image = image_observations[key]
 
 

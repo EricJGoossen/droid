@@ -93,11 +93,13 @@ class OpenPiClient(PolicyClient):
 
         with self.prevent_keyboard_interrupt():
             try:
-                return self.client.infer(request_data)["actions"]
+                actions = self.client.infer(request_data)["actions"]
+                return np.clip(actions, -1, 1)
             except Exception:
                 print("Disconnected — attempting to reconnect.")
                 self.connect()
-                return self.client.infer(request_data)["actions"]
+                actions = self.client.infer(request_data)["actions"]
+                return np.clip(actions, -1, 1)
 
     def action_space(self) -> str:
         return "joint_velocity"
@@ -183,10 +185,10 @@ class GRootClient(PolicyClient):
 
         modality_config = self._send({"endpoint": "get_modality_config"})
         self._modality_keys = {
-            modality: modality_config[modality]["modality_keys"]
+            modality: modality_config[modality]["as_json"]["modality_keys"]
             for modality in ["video", "state", "action", "language"]
         }
-        self._video_delta = modality_config["video"]["delta_indices"]
+        self._video_delta = modality_config["video"]["as_json"]["delta_indices"]
         video_history_len = max(-min(self._video_delta), 0) + 1 if self._video_delta else 1
         self._frame_buffer = deque(maxlen=video_history_len)
 
