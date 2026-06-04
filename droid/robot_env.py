@@ -1,4 +1,5 @@
 from copy import deepcopy
+from time import time
 
 import gym
 import numpy as np
@@ -61,6 +62,13 @@ class RobotEnv(gym.Env):
 
         # Return Action Info
         return action_info
+    
+    def is_moving(self, velocity_threshold=0.01): 
+        state = self._robot.get_robot_state()[0] 
+        joint_vels = np.abs(np.array(state["joint_velocities"])) 
+        return np.any(joint_vels > velocity_threshold) 
+
+
 
     def reset(self, randomize=False):
         self._robot.update_gripper(0, velocity=False, blocking=True)
@@ -70,7 +78,15 @@ class RobotEnv(gym.Env):
         else:
             noise = None
 
+        print("Resetting robot to initial configuration...")
         self._robot.update_joints(self.reset_joints, velocity=False, blocking=True, cartesian_noise=noise)
+        error = None
+        while error == None or error > 1e-1:
+            if self.is_moving():
+                self._robot.update_joints(self.reset_joints, velocity=False, blocking=True, cartesian_noise=noise)
+
+            current_joints = np.array(self._robot.get_robot_state()[0]["joint_positions"]) 
+            error = np.max(np.abs(current_joints - self.reset_joints)) 
 
     def update_robot(self, action, action_space="cartesian_velocity", gripper_action_space=None, blocking=False):
         action_info = self._robot.update_command(

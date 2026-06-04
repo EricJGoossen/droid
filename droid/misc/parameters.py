@@ -2,17 +2,17 @@ import os
 from cv2 import aruco
 
 # Robot Params #
-nuc_ip = ""
-robot_ip = ""
-laptop_ip = ""
-sudo_password = ""
-robot_type = ""  # 'panda' or 'fr3'
-robot_serial_number = ""
+nuc_ip = "172.16.0.1"
+robot_ip = "172.16.0.2"
+laptop_ip = "172.16.0.3"
+sudo_password = "weirdl@123"
+robot_type = "panda"  # 'panda' or 'fr3'
+robot_serial_number = "290839-1324463"
 
 # Camera ID's #
-hand_camera_id = ""
-varied_camera_1_id = ""
-varied_camera_2_id = ""
+hand_camera_id = "16744838"
+varied_camera_1_id = "39668372"
+varied_camera_2_id = "33393346"
 
 # Charuco Board Params #
 CHARUCOBOARD_ROWCOUNT = 9
