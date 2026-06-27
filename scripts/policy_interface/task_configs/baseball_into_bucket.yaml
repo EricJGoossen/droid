@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: BaseballIntoBucket
+instructions:
+- Put the baseball into the bucket
+- Set the baseball into the bucket
+- Place the baseball into the bucket
+- Put the white baseball into the grey bucket
+- Move the baseball into the bucket
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

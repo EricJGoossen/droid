@@ -25,7 +25,7 @@ class PolicyClient(ABC):
         pass
 
     @abstractmethod
-    def infer(self, observation: dict, instruction: str, selected_camera: str = "left") -> np.ndarray:
+    def infer(self, observation: dict, instruction: str) -> np.ndarray:
         """Run inference and return a predicted action chunk (array of actions)."""
         pass
 
@@ -39,6 +39,11 @@ class PolicyClient(ABC):
 
     @abstractmethod
     def gripper_space(self) -> str:
+        pass
+
+    @abstractmethod
+    def get_policy_checkpoint(self) -> str:
+        """Return a string identifier for the current policy checkpoint, to be recorded in eval results."""
         pass
 
     @contextlib.contextmanager
@@ -75,13 +80,13 @@ class OpenPiClient(PolicyClient):
     def disconnect(self):
         self.client = None
 
-    def infer(self, observation: dict, instruction: str, selected_camera: str = "left") -> np.ndarray:
+    def infer(self, observation: dict, instruction: str) -> np.ndarray:
         if self.client is None:
             raise RuntimeError("Client is not connected. Call connect() first.")
 
         request_data = {
             "observation/exterior_image_1_left": image_tools.resize_with_pad(
-                observation[f"{selected_camera}_image"], 224, 224
+                observation["scene_image"], 224, 224
             ),
             "observation/wrist_image_left": image_tools.resize_with_pad(
                 observation["wrist_image"], 224, 224
@@ -106,6 +111,9 @@ class OpenPiClient(PolicyClient):
 
     def gripper_space(self) -> str:
         return "position"
+    
+    def get_policy_checkpoint(self) -> str:
+        return ''
 
 
 class MolmoActClient(PolicyClient):
@@ -132,9 +140,9 @@ class MolmoActClient(PolicyClient):
     def disconnect(self):
         pass  # No persistent connection to close.
 
-    def infer(self, observation: dict, instruction: str, selected_camera: str = "left") -> np.ndarray:
+    def infer(self, observation: dict, instruction: str) -> np.ndarray:
         payload = json_numpy.dumps({
-            "external_cam": observation[f"{selected_camera}_image"],
+            "external_cam": observation["scene_image"],
             "wrist_cam": observation["wrist_image"],
             "instruction": instruction,
             "state": np.concatenate([observation["joint_position"], observation["gripper_position"]]),
@@ -156,6 +164,9 @@ class MolmoActClient(PolicyClient):
 
     def gripper_space(self) -> str:
         return "position"
+    
+    def get_policy_checkpoint(self) -> str:
+        return ''
 
 
 class GRootClient(PolicyClient):
@@ -200,12 +211,12 @@ class GRootClient(PolicyClient):
         self._video_delta = None
         self._frame_buffer = None
 
-    def infer(self, observation: dict, instruction: str, selected_camera: str = "left") -> np.ndarray:
+    def infer(self, observation: dict, instruction: str) -> np.ndarray:
         if self._socket is None or self._modality_keys is None or self._frame_buffer is None:
             raise RuntimeError("Client is not connected. Call connect() first.")
 
         H, W = self._IMAGE_RESOLUTION
-        ext_image = image_tools.resize_with_pad(observation[f"{selected_camera}_image"], H, W)
+        ext_image = image_tools.resize_with_pad(observation["scene_image"], H, W)
         wrist_image = image_tools.resize_with_pad(observation["wrist_image"], H, W)
         self._frame_buffer.append({"ext": ext_image, "wrist": wrist_image})
 
@@ -226,6 +237,9 @@ class GRootClient(PolicyClient):
 
     def gripper_space(self) -> str:
         return "position"
+    
+    def get_policy_checkpoint(self) -> str:
+        return ''
 
     def _format_observation(self, observation: dict, instruction: str) -> dict:
         """Convert the standard observation dict into the nested format the GR00T server expects."""

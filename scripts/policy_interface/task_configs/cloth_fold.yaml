@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: ClothFold
+instructions:
+- Grasp the bottom corner of the cloth and fold it in half into a triangular shape
+- Pick the bottom corner of the cloth and fold it in half into a triangular shape
+- Grab the bottom corner of the cloth and fold it in half into a triangular shape
+- Grip the bottom corner of the cloth and fold it in half into a triangular shape
+- Hold the bottom corner of the cloth and fold it in half into a triangular shape
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

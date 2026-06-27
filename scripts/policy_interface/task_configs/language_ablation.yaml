@@ -1,0 +1,25 @@
+config_type: "episode"
+task_name: LanguageAblation
+instructions:
+- Pick up the apple and put it in the pan.
+- Grab the apple and set it on the pan.
+- Take the apple and place it onto the pan.
+- Move the apple onto the pan.
+- Lift the apple and rest it on the pan.
+- The apple should be picked up and placed on the pan.
+- Onto the pan, place the apple.
+- Relocate the fruit so that it sits on the pan.
+- apple on pan
+- Pick up the apple from the table and place it onto the pan sitting nearby.
+- There is a apple resting on the surface in front of you. Pick that apple up, then move it over and place it down onto the pan that is also on the surface, so the apple ends up on the pan.
+- pickup teh appel an put it on the frying pan
+- Put the apple away.
+- Move the apple.
+- Pick up the red apple and put it on the white pan; approach from directly overhead, keep the gripper aligned with the apple's long axis, and release only once it is centered over the pan.
+max_timesteps: 900
+num_rollouts: 15
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

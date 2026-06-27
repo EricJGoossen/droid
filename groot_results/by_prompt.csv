@@ -1,0 +1,41 @@
+instruction,num_rollouts,success_rate,avg_step_score,avg_step_score_normalized,avg_recall_score,avg_recall_score_normalized,avg_timesteps,avg_duration
+"Banana is hidden below the cloth. Lift up the cloth and place it aside, then pick up the banana and place it into the dish plate",2,0.0,2.0,0.2,2.0,0.2,1200.0,55.4335834980011
+Close the cabinet drawer,2,0.0,0.0,0.0,0.0,0.0,562.5,27.319127559661865
+Close the cabinet drawer by pushing it,2,0.0,0.0,0.0,0.0,0.0,630.5,29.663488745689392
+Close the open drawer from the cabinet,2,0.0,0.0,0.0,0.0,0.0,572.5,26.787822127342224
+Grab the bottom corner of the cloth and fold it in half into a triangular shape,2,0.0,0.0,0.0,0.0,0.0,670.5,31.158854246139526
+Grasp the bottom corner of the cloth and fold it in half into a triangular shape,2,0.0,0.0,0.0,0.0,0.0,626.5,29.681232571601868
+Grasp the bread and set it beside the box,2,0.0,0.0,0.0,0.0,0.0,900.0,42.07278037071228
+Grip the bottom corner of the cloth and fold it in half into a triangular shape,2,0.0,0.0,0.0,0.0,0.0,900.0,42.18256413936615
+Hold the bottom corner of the cloth and fold it in half into a triangular shape,2,0.0,0.0,0.0,0.0,0.0,626.5,29.608883261680603
+Move the banana onto the plate,2,0.0,1.5,0.3,1.5,0.3,900.0,41.82478618621826
+Move the baseball into the bucket,2,0.0,0.5,0.1,0.5,0.1,618.5,29.23588490486145
+Move the block into the basket,2,0.0,0.0,0.0,0.0,0.0,900.0,41.93171679973602
+Move the red apple and bread into the dish bowl,2,0.0,0.5,0.05,0.5,0.05,1200.0,55.36057996749878
+"Pick and place the banana into the dish plate by first lifting the cloth and placing it aside, as the banana is placed under the cloth",2,0.0,3.5,0.35,3.5,0.35,1200.0,55.56379449367523
+Pick and place the red apple and bread into the dish bowl,2,0.0,0.5,0.05,0.5,0.05,1200.0,55.69449496269226
+Pick the bottom corner of the cloth and fold it in half into a triangular shape,2,0.0,0.0,0.0,0.0,0.0,900.0,42.383235931396484
+Pick the bread and red apple and place it into the bowl,2,0.0,0.5,0.05,0.5,0.05,1200.0,55.44363498687744
+Pick up the bread and place it outside the box,2,0.0,0.0,0.0,0.0,0.0,759.5,35.909597635269165
+Place the banana on the plate,2,0.5,4.0,0.8,4.0,0.8,566.5,27.96529734134674
+Place the baseball into the bucket,2,0.0,0.5,0.1,0.5,0.1,781.0,36.81776249408722
+Place the block into the basket,2,0.0,3.0,0.6,3.0,0.6,900.0,41.70530641078949
+Prepare the bowl with red apple and bread,2,0.0,0.0,0.0,0.0,0.0,1200.0,56.02663958072662
+Push to close the drawer from the cabinet,2,0.0,0.0,0.0,0.0,0.0,562.0,26.37337815761566
+Put the banana on the plate,2,0.5,2.5,0.5,2.5,0.5,562.5,31.21643567085266
+Put the baseball into the bucket,2,0.0,0.5,0.1,0.5,0.1,622.5,29.46865212917328
+Put the block into the basket,2,0.0,0.5,0.1,0.5,0.1,900.0,42.14557349681854
+Put the blue block into the orange basket,2,0.0,0.5,0.1,0.5,0.1,900.0,41.93654203414917
+Put the bread and red apple into the bowl,2,0.0,1.0,0.1,1.0,0.1,1200.0,55.36106264591217
+Put the white baseball into the grey bucket,2,0.0,1.0,0.2,1.0,0.2,532.5,25.355939984321594
+Put the yellow banana on the white plate,2,0.5,4.0,0.8,4.0,0.8,569.5,31.02759838104248
+Remove the bread from the box,2,0.0,0.0,0.0,0.0,0.0,900.0,42.31927013397217
+Retrieve the bread from inside the box and move it away from the box,2,0.0,1.0,0.2,1.0,0.2,900.0,41.94213330745697
+Set the banana on the plate,2,0.5,4.0,0.8,4.0,0.8,900.0,46.48235511779785
+Set the baseball into the bucket,2,0.0,0.0,0.0,0.0,0.0,900.0,42.05205476284027
+Set the block into the basket,2,0.0,1.0,0.2,1.0,0.2,900.0,42.0805104970932
+Shut the top drawer from the cabinet,2,0.0,0.0,0.0,0.0,0.0,900.0,42.54349493980408
+Take the bread out of the box,2,0.0,0.5,0.1,0.5,0.1,754.0,35.10140335559845
+"There is a banana placed below the cloth. First lift up the cloth and place it to the left side, then pick up the banana and place it into the dish plate",2,0.0,2.0,0.2,2.0,0.2,1200.0,55.49282121658325
+"There is banana hidden underneath the cloth. Pick up the cloth and place it to the side, then pick and place the banana into the dish plate",2,0.0,2.0,0.2,2.0,0.2,1200.0,56.04944467544556
+"There is banana underneath the cloth. Pick up the cloth and drop it aside, then pick and place the banana into the dish plate",2,0.0,1.5,0.15000000000000002,2.5,0.25,1200.0,56.367799520492554

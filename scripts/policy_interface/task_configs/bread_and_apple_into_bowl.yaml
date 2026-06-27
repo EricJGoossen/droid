@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: BreadAndAppleIntoBowl
+instructions:
+- Prepare the bowl with red apple and bread
+- Pick the bread and red apple and place it into the bowl
+- Pick and place the red apple and bread into the dish bowl
+- Put the bread and red apple into the bowl
+- Move the red apple and bread into the dish bowl
+max_timesteps: 1200
+num_rollouts: 10
+max_step_score: 10
+max_recall_score: 10
+record_scene_video: true
+record_wrist_video: false
+

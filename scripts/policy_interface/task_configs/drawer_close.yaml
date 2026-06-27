@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: DrawerClose
+instructions:
+- Close the cabinet drawer
+- Close the cabinet drawer by pushing it
+- Shut the top drawer from the cabinet
+- Push to close the drawer from the cabinet
+- Close the open drawer from the cabinet
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 3
+max_recall_score: 3
+record_scene_video: true
+record_wrist_video: false
+

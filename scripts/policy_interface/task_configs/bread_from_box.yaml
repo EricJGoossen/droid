@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: BreadFromBox
+instructions:
+- Remove the bread from the box
+- Take the bread out of the box
+- Pick up the bread and place it outside the box
+- Grasp the bread and set it beside the box
+- Retrieve the bread from inside the box and move it away from the box
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

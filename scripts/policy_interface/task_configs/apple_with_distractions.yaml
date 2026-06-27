@@ -1,0 +1,14 @@
+config_type: "episode"
+task_name: AppleWithDistractions
+instructions:
+- Put the red apple in the bowl
+- Place the red apple in the bowl
+- Set the red apple in the bowl
+- Move the red apple into the bowl
+- Lay the red apple in the bowl
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false

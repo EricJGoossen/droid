@@ -1,0 +1,11 @@
+config_type: "evaluation"
+evaluation_name: "full_benchmark_eval"
+episode_paths:
+  - "scripts/policy_interface/task_configs/banana_into_bowl.yaml"
+  - "scripts/policy_interface/task_configs/block_into_basket.yaml"
+  - "scripts/policy_interface/task_configs/baseball_into_bucket.yaml"
+  - "scripts/policy_interface/task_configs/bread_and_apple_into_bowl.yaml"
+  - "scripts/policy_interface/task_configs/bread_from_box.yaml"
+  - "scripts/policy_interface/task_configs/drawer_close.yaml"
+  - "scripts/policy_interface/task_configs/cloth_fold.yaml"
+  - "scripts/policy_interface/task_configs/banana_under_cloth.yaml"

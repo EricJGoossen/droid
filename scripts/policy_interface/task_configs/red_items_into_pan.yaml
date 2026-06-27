@@ -1,0 +1,14 @@
+config_type: "episode"
+task_name: RedItemsIntoPan
+instructions:
+- Put the red things into the pan
+- Place the red things into the pan
+- Put the red items into the pan
+- Place the red items into the pan
+- Move the red objects into the pan
+max_timesteps: 1200
+num_rollouts: 10
+max_step_score: 10
+max_recall_score: 10
+record_scene_video: true
+record_wrist_video: false

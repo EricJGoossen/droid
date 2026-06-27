@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: OpenBox
+instructions:
+- Open the grey box
+- Grasp the blue handle of the grey box and open it
+- Grasp the blue handle of the grey box and lift it
+- Open the grey box by holding the blue handle
+- Open the grey box by holding the blue handle and lifting it
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: BananaUnderCloth
+instructions:
+- There is banana underneath the cloth. Pick up the cloth and drop it aside, then pick and place the banana into the dish plate
+- Banana is hidden below the cloth. Lift up the cloth and place it aside, then pick up the banana and place it into the dish plate
+- There is a banana placed below the cloth. First lift up the cloth and place it to the left side, then pick up the banana and place it into the dish plate
+- There is banana hidden underneath the cloth. Pick up the cloth and place it to the side, then pick and place the banana into the dish plate
+- Pick and place the banana into the dish plate by first lifting the cloth and placing it aside, as the banana is placed under the cloth
+max_timesteps: 1200
+num_rollouts: 10
+max_step_score: 10
+max_recall_score: 10
+record_scene_video: true
+record_wrist_video: false
+

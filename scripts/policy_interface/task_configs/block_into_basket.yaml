@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: BlockIntoBasket
+instructions:
+- Put the block into the basket
+- Set the block into the basket
+- Place the block into the basket
+- Put the blue block into the orange basket
+- Move the block into the basket
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

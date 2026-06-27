@@ -1,0 +1,15 @@
+config_type: "episode"
+task_name: BananaIntoBowl
+instructions:
+- Put the banana on the plate
+- Set the banana on the plate
+- Place the banana on the plate
+- Put the yellow banana on the white plate
+- Move the banana onto the plate
+max_timesteps: 900
+num_rollouts: 10
+max_step_score: 5
+max_recall_score: 5
+record_scene_video: true
+record_wrist_video: false
+

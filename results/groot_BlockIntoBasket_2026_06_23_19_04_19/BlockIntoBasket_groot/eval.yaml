@@ -1,0 +1,65 @@
+expected_files:
+- scene_camera
+folder_path: ./results/groot_BlockIntoBasket_2026_06_23_19_04_19/BlockIntoBasket_groot
+instructions:
+- Put the block into the basket
+- Set the block into the basket
+- Place the block into the basket
+- Put the blue block into the orange basket
+- Move the block into the basket
+max_recall_score: 5
+max_step_score: 5
+max_timesteps: 900
+num_rollouts: 10
+policy_checkpoint: ''
+policy_name: groot
+rollouts:
+  0:
+    comments: ''
+    data_files:
+    - scene_camera_rollout_0.mp4
+    duration: 8.695908784866333
+    instruction: Put the block into the basket
+    recall_score: 0
+    run_number: 0
+    step_score: 0
+    success: false
+    timestamp: '2026_06_23_19_04_42'
+    timesteps: 900
+  1:
+    comments: '0'
+    data_files:
+    - scene_camera_rollout_1.mp4
+    duration: 8.952473163604736
+    instruction: Set the block into the basket
+    recall_score: 0
+    run_number: 1
+    step_score: 0
+    success: false
+    timestamp: '2026_06_23_19_06_59'
+    timesteps: 900
+  2:
+    comments: ''
+    data_files:
+    - scene_camera_rollout_2.mp4
+    duration: 8.778658151626587
+    instruction: Place the block into the basket
+    recall_score: 0
+    run_number: 2
+    step_score: 0
+    success: false
+    timestamp: '2026_06_23_19_09_14'
+    timesteps: 900
+  3:
+    comments: ''
+    data_files:
+    - scene_camera_rollout_3.mp4
+    duration: 8.836796045303345
+    instruction: Put the blue block into the orange basket
+    recall_score: 0
+    run_number: 3
+    step_score: 0
+    success: false
+    timestamp: '2026_06_23_19_11_00'
+    timesteps: 900
+task_name: BlockIntoBasket
